@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="form-container">
+      <div id="login-form">
+        <h2>Login</h2>
+        <form>
+          <input type="text" placeholder="Username" class="loginName" />
+          <input type="email" placeholder="Email"  class="loginEmail" />
+          <button type="submit" class="login-btn">Login</button>
+        </form>
+        <button class="toggle-btn" onclick="toggleForm()">
+          Don't have an account? Register
+        </button>
+      </div>
+      <div id="register-form" style="display: none">
+        <h2>Register</h2>
+        <span class="error-msg"></span>
+        <form>
+         <label for="">Username <sup>*</sup></label>
+          <input type="text" placeholder="Usename" class="username" />
+          
+          <label for="">Email  <sup>*</sup></label>
+          <input type="email" placeholder="Email" class="email"  />
+          <label for="">Name  <sup>*</sup></label>
+          <input type="text" placeholder="name" class="personalname"/>
+          <button type="submit" class="register-btn" >Register</button>
+        </form>
+        <button class="toggle-btn" onclick="toggleForm()">
+          Already have an account? Login
+        </button>
+      </div>
+    </div>
+    <script>
+      function toggleForm() {
+        const loginForm = document.getElementById("login-form");
+        const registerForm = document.getElementById("register-form");
+        if (loginForm.style.display === "none") {
+          loginForm.style.display = "block";
+          registerForm.style.display = "none";
+        } else {
+          loginForm.style.display = "none";
+          registerForm.style.display = "block";
+        }
+      }
+    </script>
+    
+    <script src="sample.js">        
+    </script>
+  </body>
+</html>
