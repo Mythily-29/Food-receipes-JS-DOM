@@ -9,8 +9,9 @@ show_details.addEventListener('click',()=>{show_details.style.display="none"})
 
 username.textContent = `Hello ` + `${JSON.parse(sessionStorage.getItem('user'))}` + ` !`
 
-let api_key = '05b8d9221e8d45ad97366edc3a1bbc4a';
-let url = 'https://api.spoonacular.com/recipes/complexSearch?apiKey='
+let api_key = '279b1430877a4773957aaf9ef652044d';
+let url = 'https://api.spoonacular.com/recipes/random?apiKey='
+let searchurl='https://api.spoonacular.com/recipes/complexSearch?apiKey='
 let offset = 5
 
 function api() {
@@ -18,8 +19,8 @@ function api() {
     fetch(`${url}${api_key}&number=10`)
         .then(res => res.json())
         .then(data => {
-            data.results.forEach(x => imageSilder(x));
-            data.results.forEach(x => receipes(x))
+            data.recipes.forEach(x => imageSilder(x));
+            data.recipes.forEach(x => receipes(x))
         })
         .catch(error => alert(error))
         .finally(() => loader.style.display = 'none');
@@ -48,7 +49,7 @@ load_more.addEventListener('click', () => { loader.style.display = 'block';
     offset += 5
     fetch(`${url}${api_key}&offset=${offset}&number=5`)
         .then(res => res.json())
-        .then(data => data.results.forEach(x => receipes(x)))
+        .then(data => data.recipes.forEach(x => receipes(x)))
         .catch(error => alert(error))
         .finally(() => loader.style.display = 'none');
 })
@@ -56,7 +57,7 @@ load_more.addEventListener('click', () => { loader.style.display = 'block';
 const input = document.querySelector('input[type="search"]');
 input.addEventListener("search", () => {
     loader.style.display = 'block';
-    fetch(`${url}${api_key}&titleMatch=${input.value}`)
+    fetch(`${searchurl}${api_key}&titleMatch=${input.value}`)
         .then(res => res.json())
         .then(data => data.results.forEach(x=>display(x)))
         .catch(error => alert(error))
@@ -65,22 +66,38 @@ input.addEventListener("search", () => {
 
 document.getElementById('filter').addEventListener('click',(e)=>{ loader.style.display = 'block';
     let filterapi;
-    e.target.className=='allreceipes'? filterapi=`https://api.spoonacular.com/recipes/complexSearch?apiKey=${api_key}&number=15` :filterapi=`https://api.spoonacular.com/recipes/complexSearch?apiKey=${api_key}&cuisine=${e.target.className}&number=15` 
+    e.target.className=='allreceipes'? filterapi=`https://api.spoonacular.com/recipes/random?apiKey=${api_key}&number=15` :filterapi=`https://api.spoonacular.com/recipes/random?apiKey=${api_key}&cuisine=${e.target.className}&number=15` 
     recipe_item.innerHTML="";receipes_list.innerHTML="";slider();
     fetch(`${filterapi}`)
     .then(res=>res.json())
     .then(data=>{
-        data.results.forEach(x => imageSilder(x));
-        data.results.forEach(x => receipes(x))
+        data.recipes.forEach(x => imageSilder(x));
+        data.recipes.forEach(x => receipes(x))
     })
     .catch(error => console.log(error))
     .finally(() => loader.style.display = 'none');
 })
 function slider(){
     document.getElementById('actionButton').addEventListener('click',(e)=>{
-    e.target.className=='fa-solid fa-forward'? recipe_item.scrollLeft +=150:recipe_item.scrollLeft -=150
+    e.target.className=='fa-solid fa-forward'? recipe_item.scrollLeft -=150:recipe_item.scrollLeft +=150
     })
 }slider()
 
 
-
+let arr = []
+fetch(`${url}${api_key}&number=10`)
+.then(res=>res.json())
+.then(data=>data.recipes.forEach(x=>{
+    x.cuisines.forEach(c=>{
+        if(!arr.includes(c)){
+            arr.push(c)
+            createButton(c)
+        }
+    })
+}))
+let filter=document.getElementById('filter')
+function createButton(name) {
+    let createElement = document.createElement('button');
+    createElement.textContent = name;
+    filter.append(createElement);
+  }
